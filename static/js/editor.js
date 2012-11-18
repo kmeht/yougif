@@ -213,14 +213,38 @@ $(function() {
         }
     }
 
+    function rotateLeft() {
+        var image = $("#stage .image.selected");
+        if (image.length > 0) {
+            var data = imageData[image.data('index')][currentFrame];
+            if (!data.rotation) {
+                data.rotation = 0;
+            }
+            data.rotation -= 5;
+            image.css({'-webkit-transform': 'rotate(' + data.rotation + 'deg)'});
+        }
+    }
+
+    function rotateRight() {
+        var image = $("#stage .image.selected");
+        if (image.length > 0) {
+            var data = imageData[image.data('index')][currentFrame];
+            if (!data.rotation) {
+                data.rotation = 0;
+            }
+            data.rotation += 5;
+            image.css({'-webkit-transform': 'rotate(' + data.rotation + 'deg)'});
+        }
+    }
+
     // Register keyboard handlers.
     $(document).keydown(function(e) {
         switch (e.keyCode) {
             case 37: handleLeftArrow(); break;
             case 39: handleRightArrow(); break;
             case 68: deleteSelectedImage(); break;
-            case 82:
-            case 84:
+            case 82: rotateLeft(); break;
+            case 84: rotateRight(); break;
         }
     });
 
