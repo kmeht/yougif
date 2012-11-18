@@ -88,8 +88,7 @@ $(function() {
 		e.preventDefault();
 		
 		var file = e.originalEvent.dataTransfer.files[0];
-		//var uuid = window.location.pathname.split("/")[1];
-		var uuid = "dicks";
+		var uuid = window.location.pathname.split("/")[1];
 		var name = file.name
 		$.ajax({
 			type: 'post',
@@ -118,8 +117,7 @@ $(function() {
 	});
 
 	$(document).on("click", "#submit", function() {
-		//var uuid = window.location.pathname.split("/")[1];
-		var uuid = "dicks";
+		var uuid = window.location.pathname.split("/")[1];
 		$.ajax({
 			type: 'post',
 			url: '/' + uuid + '/finish',
