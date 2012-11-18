@@ -4,6 +4,7 @@ import uuid
 import logging
 import json
 import os
+import Image
 
 from flask import Flask, url_for, request, render_template, send_from_directory
 from werkzeug import secure_filename
@@ -42,16 +43,16 @@ def output_gif(filename):
 def file_upload(session_id, filename):
     return send_from_directory("tmp/%s/" % session_id, filename)
 
-@app.route('/<session_id>/add_image', methods=['POST'])
-def add_image(session_id):
+@app.route('/<session_id>/add_image/<filename>', methods=['POST'])
+def add_image(session_id, filename):
     if request.method == 'POST':
-        data = request.json
-        
-        name = data['filename']
-        bin_image = data['file']
+        bin_image = request.data
+
+        name = filename
+
         with open("tmp/%s/%s" % (session_id, secure_filename(name)), "wb") as f:
             f.write(bin_image)
-
+        
         img = Image.open("tmp/%s/%s" % (session_id, secure_filename(name)))
         width, height = img.size
         
