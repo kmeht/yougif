@@ -13,13 +13,13 @@ app = Flask(__name__)
 
 @app.route("/")
 def index():
-    session_id = uuid.uuid4()
-    return '<form action=session_id method="post">Youtube url to download: <input type="text" name="url"><br><input type="submit" value="Go!"></form>'
+    session_id = str(uuid.uuid4())
+    return '<form action=' + session_id + ' method="post">Youtube url to download: <input type="text" name="url"><br><input type="submit" value="Go!"></form>'
 
-@app.route("/<session_id>")
+@app.route("/<session_id>", methods=['POST'])
 def editor(session_id):
     movie_url = request.form['url']
-    movie_id = re.search(r"v=(\w+)", movie_url).group(1)
+    movie_id = re.search(r"v=(\w+)$", movie_url).group(1)
 
     # Grab the youtube video
     subprocess.call("youtube-dl -f 5 -o tmp/%s/%s.flv %s" % (session_id, movie_id, movie_url), shell=True)
@@ -27,8 +27,8 @@ def editor(session_id):
     # Get the frames
     subprocess.call("ffmpeg -i tmp/%s/%s.flv -r 15 -y -an -t 10 tmp/%s/out-%%3d.gif" % (session_id, movie_id, session_id), shell=True)
 
-    num_frames = int(subprocess.check_output("ls tmp/%s | wc -l" % session_id), shell=True) - 1
-    frames = ["tmp/%s/out-%%03d.gif" % (session_id, num) for num in xrange(1, num_frames+1)]
+    num_frames = int(subprocess.check_output("ls tmp/%s | wc -l" % session_id, shell=True)) - 1
+    frames = ["tmp/%s/out-%03d.gif" % (session_id, num) for num in xrange(1, num_frames+1)]
 
     return render_template('editor.html', frames=frames)
 
@@ -60,6 +60,11 @@ def output_gif(filename):
 def file_upload(session_id, filename):
     return send_from_directory("tmp/%s/" % session_id, filename)
 
+@app.route('/tmp/<session_id>/<path:filename>')
+def file_upload(session_id, filename):
+    return send_from_directory("tmp/%s/" % session_id, filename)
+
+
 @app.route('/<session_id>/add_image/<filename>', methods=['POST'])
 def add_image(session_id, filename):
     if request.method == 'POST':
@@ -84,18 +89,20 @@ def add_image(session_id, filename):
 @app.route('/<session_id>/finish', methods=['POST'])
 def finish(session_id):
     data = request.json
-    for img in data:
+    for img in data["images"]:
         name = img["name"]
-        addedImg = Image.open("tmp/%s/name" % session_id)
-        for frame_num, attrs in img:
+        addedImg = Image.open("tmp/%s/%s" % (session_id, name))
+
+        for frame_num, attrs in img.items():
             if frame_num == "name":
                 continue
-            imgName = "tmp/%s/out-%03d.gif" % (session_id, frame_num)
+            imgName = "tmp/%s/out-%03d.gif" % (session_id, int(frame_num))
             baseImg = Image.open(imgName)
-            baseImg.paste(addedImg,(attrs["left"], attrs["top"], attrs["left"]+attrs["width"], attrs["top"]+attrs["height"]))
+            addedImg = addedImg.resize((attrs["width"], attrs["height"]))
+            baseImg.paste(addedImg,(attrs["left"], attrs["top"]))
             baseImg.save(imgName)
             
-    os.mkdir("output/%s" % session_id)
+    #os.mkdir("output/%s" % session_id)
     subprocess.call("convert -delay 1x15 -loop 0 tmp/%s/out-*.gif -layers Optimize output/%s/final.gif" % (session_id, session_id), shell=True)
 
     return url_for("output_gif", filename="%s/final.gif" % session_id)
