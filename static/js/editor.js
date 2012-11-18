@@ -136,18 +136,6 @@ $(function() {
 		return false;
 	});
 
-	// TESTING
-	images['upvote'] = {
-		width: '210',
-		height: '210',
-		url: '/static/img/upvote.jpg'
-	};
-	images['downvote'] = {
-		width: '72',
-		height: '67',
-		url: '/static/img/downvote.png'
-	};
-
 
 	
 	$(document).on("dragover", "#stage", function(e) {

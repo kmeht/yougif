@@ -1,27 +1,23 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title>Edit Your Gif</title>
-	<link rel="stylesheet" type="text/css" href="/static/css/style.css" />
-	<link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.9.1/themes/base/jquery-ui.css" />
-	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/jquery-ui.min.js"></script>
+{% extends "base" %}
+
+{% block js %}
+	{{ super() }}
 	<script type="text/javascript" src="/static/js/editor.js"></script>
-</head>
-<body>
-	<div id="container">
-		<div id="toolbar">
-		</div>
-		<div id="window">
-			<div id="images">
-				{% for frame in frames %}
-					<img src="{{ frame }}" />
-				{% endfor %}
-			</div>
-			<div id="stage" draggable="true">
-			</div>
-		</div>
-		<a href="#" id="submit">SUBMIT</a>
+{% endblock js %}
+
+{% block body %}
+<div id="container">
+	<div id="toolbar">
 	</div>
-</body>
-</html>
+	<div id="window">
+		<div id="images">
+			{% for frame in frames %}
+				<img src="{{ frame }}" />
+			{% endfor %}
+		</div>
+		<div id="stage" draggable="true">
+		</div>
+	</div>
+	<a href="#" id="submit">SUBMIT</a>
+</div>
+{% endblock body %}
