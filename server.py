@@ -13,7 +13,25 @@ app = Flask(__name__)
 
 @app.route("/")
 def index():
-    return render_template('index.html')
+    session_id = uuid.uuid4()
+    return '<form action=session_id method="post">Youtube url to download: <input type="text" name="url"><br><input type="submit" value="Go!"></form>'
+
+@app.route("/<session_id>")
+def editor(session_id):
+    movie_url = request.form['url']
+    movie_id = re.search(r"v=(\w+)", movie_url).group(1)
+
+    # Grab the youtube video
+    subprocess.call("youtube-dl -f 5 -o tmp/%s/%s.flv %s" % (session_id, movie_id, movie_url), shell=True)
+
+    # Get the frames
+    subprocess.call("ffmpeg -i tmp/%s/%s.flv -r 15 -y -an -t 10 tmp/%s/out-%%3d.gif" % (session_id, movie_id, session_id), shell=True)
+
+    num_frames = int(subprocess.check_output("ls tmp/%s | wc -l" % session_id), shell=True) - 1
+    frames = ["tmp/%s/out-%%03d.gif" % (session_id, num) for num in xrange(1, num_frames+1)]
+
+    return render_template('editor.html', frames=frames)
+
 
 @app.route("/get_movie")
 def get_movie():
@@ -66,7 +84,22 @@ def add_image(session_id, filename):
 
 @app.route('/<session_id>/finish', methods=['POST'])
 def finish(session_id):
-    return 1
+    data = request.json
+    for img in data:
+        name = img["name"]
+        addedImg = Image.open("tmp/%s/name" % session_id)
+        for frame_num, attrs in img:
+            if frame_num == "name":
+                continue
+            imgName = "tmp/%s/out-%03d.gif" % (session_id, frame_num)
+            baseImg = Image.open(imgName)
+            baseImg.paste(addedImg,(attrs["left"], attrs["top"], attrs["left"]+attrs["width"], attrs["top"]+attrs["height"]))
+            baseImg.save(imgName)
+            
+    os.mkdir("output/%s" % session_id)
+    subprocess.call("convert -delay 1x15 -loop 0 tmp/%s/out-*.gif -layers Optimize output/%s/final.gif" % (session_id, session_id), shell=True)
+
+    return url_for("output_gif", filename="%s/final.gif" % session_id)
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0",port=3001,debug=True)
