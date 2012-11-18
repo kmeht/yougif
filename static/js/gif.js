@@ -96,11 +96,18 @@ $(function() {
 			data: file,
 			processData: false,
 			success: function(data) {
+				data = JSON.parse(data);
 				images[data.name] = {
 					url: data.url,
 					height: data.height,
 					width: data.width
 				};
+				var image = $('<img>');
+				image
+					.attr('src', data.url)
+					.data('name', data.name)
+					.attr('draggable', true);
+				$("#toolbar").append(image);
 			},
 			error: function() {
 				alert("there was an error...");
