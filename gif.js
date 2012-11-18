@@ -86,15 +86,16 @@ $(function() {
 		e.preventDefault();
 		
 		var file = e.originalEvent.dataTransfer.files[0];
+		var uuid = window.location.pathname.split("/")[1];
 		var reader = new FileReader();
 		reader.readAsText(file, 'UTF-8');
 		reader.onload = function(e) {
 			result = e.target.result;
 			$.post(
-				'/documents.json',
+				'/' + uuid + '/add_new',
 				{
 					file : result, 
-					uuid : window.location.pathname.slice(1)
+					uuid : uuid
 				},
 				function(data) {
 					images[data.name] = {
