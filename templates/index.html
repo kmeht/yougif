@@ -9,4 +9,9 @@
 		<input type="text" name="url" placeholder="Paste the URL to a YouTube video here and hit Enter!" />
 	</form>
 </div>
+<script>
+$('form').submit(function() {
+    $('input').attr('value', $('input').val().split(/&/)[0]);
+});
+</script>
 {% endblock body %}
