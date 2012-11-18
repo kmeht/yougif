@@ -127,6 +127,7 @@ $(function() {
 			}),
 			success: function(data) {
 				console.log(data);
+				window.location.href = data;
 			},
 			error: function() {
 				console.log("there was some error");
