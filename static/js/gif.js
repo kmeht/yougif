@@ -89,13 +89,14 @@ $(function() {
 		//var uuid = window.location.pathname.split("/")[1];
 		var uuid = "dicks";
 		var reader = new FileReader();
-		reader.readAsText(file, 'UTF-8');
+		//reader.readAsText(file, 'UTF-8');
+		reader.readAsArrayBuffer(file);
 		reader.onload = function(e) {
 			result = e.target.result;
 			$.ajax({
 				type: 'post',
 				url: '/' + uuid + '/add_image',
-				contentType: 'application/json;charset=UTF-8',
+				contentType: 'application/json',
 				data: JSON.stringify({
 					filename: file.name,
 					file : result, 
