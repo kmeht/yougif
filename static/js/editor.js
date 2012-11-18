@@ -112,6 +112,7 @@ $(function() {
                     .attr('src', data.url)
                     .data('name', data.name)
                     .attr('draggable', true);
+                $("#toolbar .empty").remove();
                 $("#toolbar").append(image);
             },
             error: function() {
