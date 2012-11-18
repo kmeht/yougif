@@ -88,32 +88,24 @@ $(function() {
 		var file = e.originalEvent.dataTransfer.files[0];
 		//var uuid = window.location.pathname.split("/")[1];
 		var uuid = "dicks";
-		var reader = new FileReader();
-		//reader.readAsText(file, 'UTF-8');
-		reader.readAsArrayBuffer(file);
-		reader.onload = function(e) {
-			result = e.target.result;
-			$.ajax({
-				type: 'post',
-				url: '/' + uuid + '/add_image',
-				contentType: 'application/json',
-				data: JSON.stringify({
-					filename: file.name,
-					file : result, 
-					uuid : uuid
-				}),
-				success: function(data) {
-					images[data.name] = {
-						url: data.url,
-						height: data.height,
-						width: data.width
-					};
-				},
-				error: function() {
-					alert("there was an error...");
-				}
-			});
-		}
+		var name = file.name
+		$.ajax({
+			type: 'post',
+			url: '/' + uuid + '/add_image/' + name,
+			contentType: false,
+			data: file,
+			processData: false,
+			success: function(data) {
+				images[data.name] = {
+					url: data.url,
+					height: data.height,
+					width: data.width
+				};
+			},
+			error: function() {
+				alert("there was an error...");
+			}
+		});
 	});
 
 	$(document).on("click", "#submit", function() {
