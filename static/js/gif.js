@@ -121,7 +121,7 @@ $(function() {
 		$.ajax({
 			type: 'post',
 			url: '/' + uuid + '/finish',
-			contentType: 'application/json;charset=UTF-8',
+			contentType: 'application/json',
 			data: JSON.stringify({
 				images: imageData
 			}),
@@ -224,10 +224,6 @@ $(function() {
 			case 8:
 			case 46: deleteSelectedImage(); break;
 		}
-	});
-
-	$("#submit").click(function() {
-		alert(JSON.stringify(imageData));
 	});
 
 });
