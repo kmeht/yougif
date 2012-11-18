@@ -93,8 +93,8 @@ $(function() {
 		reader.onload = function(e) {
 			result = e.target.result;
 			$.ajax({
-				type: 'POST',
-				url: 'http://98.210.146.180:3001/' + uuid + '/add_new',
+				type: 'post',
+				url: '/' + uuid + '/add_image',
 				contentType: 'json',
 				data: {
 					filename: file.name,
