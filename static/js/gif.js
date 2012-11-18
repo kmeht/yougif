@@ -95,12 +95,12 @@ $(function() {
 			$.ajax({
 				type: 'post',
 				url: '/' + uuid + '/add_image',
-				contentType: 'json',
-				data: {
+				contentType: 'application/json;charset=UTF-8',
+				data: JSON.stringify({
 					filename: file.name,
 					file : result, 
 					uuid : uuid
-				},
+				}),
 				success: function(data) {
 					images[data.name] = {
 						url: data.url,

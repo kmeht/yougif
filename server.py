@@ -48,7 +48,7 @@ def add_image(session_id):
     if request.method == 'POST':
         data = request.json
         
-        name = data['name']
+        name = data['filename']
         bin_image = data['file']
         with open("tmp/%s/%s" % (session_id, secure_filename(name)), "wb") as f:
             f.write(bin_image)
