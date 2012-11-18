@@ -28,7 +28,7 @@ def editor(session_id):
     subprocess.call("ffmpeg -i tmp/%s/%s.flv -r 15 -y -an -t 10 tmp/%s/out-%%3d.gif" % (session_id, movie_id, session_id), shell=True)
 
     num_frames = int(subprocess.check_output("ls tmp/%s | wc -l" % session_id, shell=True)) - 1
-    frames = ["tmp/%s/out-%03d.gif" % (session_id, num) for num in xrange(1, num_frames+1)]
+    frames = ["tmp/%s/out-%03d.gif" % (session_id, num) for num in xrange(1, num_frames)]
 
     return render_template('editor.html', frames=frames)
 
@@ -91,7 +91,7 @@ def finish(session_id):
     data = request.json
     ratio = data["ratio"]
     for img in data["images"]:
-        name = img["name"]
+        name = secure_filename(img["name"])
         addedImg = Image.open("tmp/%s/%s" % (session_id, name))
 
         for frame_num, attrs in img.items():
@@ -99,10 +99,8 @@ def finish(session_id):
                 continue
             imgName = "tmp/%s/out-%03d.gif" % (session_id, int(frame_num))
             baseImg = Image.open(imgName).convert("RGBA")
-            #logging.error(baseImg.mode)
-            #logging.error(addedImg.mode)
-            addedImg = addedImg.resize((attrs["width"]*ratio, attrs["height"]*ratio))
-            baseImg.paste(addedImg,(attrs["left"]*ratio, attrs["top"]*ratio))
+            addedImg = addedImg.resize((int(attrs["width"]*ratio), int(attrs["height"]*ratio)))
+            baseImg.paste(addedImg,(int(attrs["left"]*ratio), int(attrs["top"]*ratio)), mask=addedImg)
             baseImg.save(imgName)
     try:
         os.mkdir("output/%s" % session_id)
