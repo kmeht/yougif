@@ -112,35 +112,25 @@ $(function() {
 					alert("there was an error...");
 				}
 			});
-			/*$.post(
-				'http://98.210.146.180:3001/' + uuid + '/add_image',
-				{
-					filename: file.name,
-					file : result, 
-					uuid : uuid
-				},
-				function(data) {
-					images[data.name] = {
-						url: data.url,
-						height: data.height,
-						width: data.width
-					};
-				}
-			);*/
 		}
 	});
 
 	$(document).on("click", "submit", function() {
 		var uuid = window.location.pathname.split("/")[1];
-		$.post(
-			'/' + uuid,
-			{
+		$.ajax({
+			type: 'post',
+			url: '/' + uuid + '/add_image',
+			contentType: 'application/json;charset=UTF-8',
+			data: JSON.stringify({
 				images: imageData
+			}),
+			success: function(data) {
+				console.log("some shit");
 			},
-			function(data) {
-				alert("Some shit happened");
+			error: function() {
+				console.log("there was some error")l
 			}
-		);
+		});
 	});
 
 	// TESTING
