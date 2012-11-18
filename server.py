@@ -15,7 +15,8 @@ app = Flask(__name__)
 @app.route("/")
 def index():
     session_id = str(uuid.uuid4())
-    return '<form action=' + session_id + ' method="post">Youtube url to download: <input type="text" name="url"><br><input type="submit" value="Go!"></form>'
+    #return '<form action=' + session_id + ' method="post">Youtube url to download: <input type="text" name="url"><br><input type="submit" value="Go!"></form>'
+    return render_template('index.html', session_id=session_id)
 
 @app.route("/<session_id>", methods=['POST'])
 def editor(session_id):

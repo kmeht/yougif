@@ -32,7 +32,8 @@ $(function() {
                         top: imageData[index][currentFrame-1].top,
                         left: imageData[index][currentFrame-1].left,
                         height: imageData[index][currentFrame-1].height,
-                        width: imageData[index][currentFrame-1].width
+                        width: imageData[index][currentFrame-1].width,
+                        rotation: imageData[index][currentFrame-1].rotation
                     };
                 } else {
                     $(this).css({display: 'none'});
@@ -49,6 +50,9 @@ $(function() {
                 width: data.width,
                 display: 'block'
             });
+            if (data.rotation) {
+                $(this).css({'-webkit-transform': 'rotate(' + data.rotation + 'deg)'})
+            }
         });
     }
 
