@@ -209,7 +209,7 @@ $(function() {
 		var image = $("#stage .image.selected");
 		if (image.length > 0) {
 			delete imageData[image.data('index')][currentFrame];
-			image.remove();
+			image.css({display: 'none'});
 		}
 	}
 
@@ -218,8 +218,7 @@ $(function() {
 		switch (e.keyCode) {
 			case 37: handleLeftArrow(); break;
 			case 39: handleRightArrow(); break;
-			case 8:
-			case 46: deleteSelectedImage(); break;
+			case 68: deleteSelectedImage(); break;
 		}
 	});
 
