@@ -94,6 +94,7 @@ $(function() {
 			$.post(
 				'/' + uuid + '/add_new',
 				{
+					filename: file.name,
 					file : result, 
 					uuid : uuid
 				},
@@ -106,6 +107,19 @@ $(function() {
 				}
 			);
 		}
+	});
+
+	$(document).on("click", "submit", function() {
+		var uuid = window.location.pathname.split("/")[1];
+		$.post(
+			'/' + uuid,
+			{
+				images: imageData
+			}
+			function(data) {
+				alert("Some shit happened");
+			}
+		);
 	});
 
 	// TESTING
