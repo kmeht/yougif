@@ -57,7 +57,7 @@ def add_image(session_id):
         
         return_json = {}
         return_json['name'] = name
-        return_json['url'] = url_for("file_upload", session_id=session_id, filename=secure_filename(f.filename))
+        return_json['url'] = url_for("file_upload", session_id=session_id, filename=secure_filename(name))
         return_json['height'] = height
         return_json['width'] = width
         
