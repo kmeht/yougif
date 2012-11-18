@@ -115,34 +115,37 @@ $(function() {
 		}
 	});
 
-	$(document).on("click", "submit", function() {
-		var uuid = window.location.pathname.split("/")[1];
+	$(document).on("click", "#submit", function() {
+		//var uuid = window.location.pathname.split("/")[1];
+		var uuid = "dicks";
 		$.ajax({
 			type: 'post',
-			url: '/' + uuid + '/add_image',
+			url: '/' + uuid + '/finish',
 			contentType: 'application/json;charset=UTF-8',
 			data: JSON.stringify({
 				images: imageData
 			}),
 			success: function(data) {
-				console.log("some shit");
+				console.log(data);
 			},
 			error: function() {
-				console.log("there was some error")l
+				console.log("there was some error");
 			}
 		});
+
+		return false;
 	});
 
 	// TESTING
 	images['upvote'] = {
 		width: '210',
 		height: '210',
-		url: 'img/upvote.jpg'
+		url: '/static/img/upvote.jpg'
 	};
 	images['downvote'] = {
 		width: '72',
 		height: '67',
-		url: 'img/downvote.png'
+		url: '/static/img/downvote.png'
 	};
 
 
