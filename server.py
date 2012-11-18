@@ -104,11 +104,11 @@ def finish(session_id):
             addedImg = addedImg.resize((attrs["width"]*ratio, attrs["height"]*ratio))
             baseImg.paste(addedImg,(attrs["left"]*ratio, attrs["top"]*ratio))
             baseImg.save(imgName)
-    
     try:
         os.mkdir("output/%s" % session_id)
     except:
         pass
+
     subprocess.call("convert -delay 1x15 -loop 0 tmp/%s/out-*.gif -layers Optimize output/%s/final.gif" % (session_id, session_id), shell=True)
 
     return url_for("output_gif", filename="%s/final.gif" % session_id)

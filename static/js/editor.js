@@ -118,12 +118,20 @@ $(function() {
 
 	$(document).on("click", "#submit", function() {
 		var uuid = window.location.pathname.split("/")[1];
+
+		// Calculate the scaling ratio.
+		var frame = $("#images img.current");
+		frame.css({ width: 'auto'});
+		var ratio = frame.width()/650.0;
+		frame.css({ width: '' });
+
 		$.ajax({
 			type: 'post',
 			url: '/' + uuid + '/finish',
 			contentType: 'application/json',
 			data: JSON.stringify({
-				images: imageData
+				images: imageData,
+				ratio: ratio
 			}),
 			success: function(data) {
 				console.log(data);
