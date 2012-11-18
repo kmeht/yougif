@@ -220,7 +220,7 @@ $(function() {
             if (!data.rotation) {
                 data.rotation = 0;
             }
-            data.rotation -= 5;
+            data.rotation = (data.rotation - 5) % 360;
             image.css({'-webkit-transform': 'rotate(' + data.rotation + 'deg)'});
         }
     }
@@ -232,7 +232,7 @@ $(function() {
             if (!data.rotation) {
                 data.rotation = 0;
             }
-            data.rotation += 5;
+            data.rotation = (data.rotation + 5) % 360;
             image.css({'-webkit-transform': 'rotate(' + data.rotation + 'deg)'});
         }
     }
