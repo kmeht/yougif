@@ -32,7 +32,6 @@ def editor(session_id):
 
     return render_template('editor.html', frames=frames)
 
-
 @app.route("/get_movie")
 def get_movie():
     session_id = uuid.uuid4()
