@@ -5,6 +5,7 @@ import logging
 import json
 import os
 import Image
+import math
 
 from flask import Flask, url_for, request, render_template, send_from_directory
 from werkzeug import secure_filename
@@ -32,26 +33,6 @@ def editor(session_id):
 
     return render_template('editor.html', frames=frames)
 
-@app.route("/get_movie")
-def get_movie():
-    session_id = uuid.uuid4()
-    movie_url = request.args.get("url", "")
-    if movie_url:
-        movie_id = re.search(r"v=(\w+)", movie_url).group(1)
-        # Grab the youtube video
-        subprocess.call("youtube-dl -f 5 -o tmp/%s/%s.flv %s" % (session_id, movie_id, movie_url), shell=True)
-
-        # Get the frames
-        subprocess.call("ffmpeg -i tmp/%s/%s.flv -r 15 -y -an -t 10 tmp/%s/out-%%3d.gif" % (session_id, movie_id, session_id), shell=True)
-
-        # Put the frames together
-        os.mkdir("output/%s" % session_id)
-        subprocess.call("convert -delay 1x15 -loop 0 tmp/%s/out-*.gif -layers Optimize output/%s/%s.gif" % (session_id, session_id, movie_id), shell=True)
-
-        return render_template('get_movie.html', movie_id=movie_id, session_id=session_id)
-    else:
-        return '<form>Youtube url to download: <input type="text" name="url"><br><input type="submit" value="Go!"></form>'
-
 @app.route('/output/<path:filename>')
 def output_gif(filename):
     return send_from_directory("output/", filename)
@@ -63,7 +44,6 @@ def file_upload(session_id, filename):
 @app.route('/tmp/<session_id>/<path:filename>')
 def file_upload(session_id, filename):
     return send_from_directory("tmp/%s/" % session_id, filename)
-
 
 @app.route('/<session_id>/add_image/<filename>', methods=['POST'])
 def add_image(session_id, filename):
@@ -92,21 +72,34 @@ def finish(session_id):
     ratio = data["ratio"]
     for img in data["images"]:
         name = secure_filename(img["name"])
-        addedImg = Image.open("tmp/%s/%s" % (session_id, name))
+        origAddedImg = Image.open("tmp/%s/%s" % (session_id, name))
 
         for frame_num, attrs in img.items():
             if frame_num == "name":
                 continue
+            
+            # Get the frame
             imgName = "tmp/%s/out-%03d.gif" % (session_id, int(frame_num))
             baseImg = Image.open(imgName).convert("RGBA")
-            addedImg = addedImg.resize((int(attrs["width"]*ratio), int(attrs["height"]*ratio)))
+            addedImg = origAddedImg.copy().resize((int(attrs["width"]*ratio), int(attrs["height"]*ratio)))
+
+            # Handles rotation
+            if attrs.get("rotation"):
+                deg = int(attrs.get("rotation"))
+                if deg > 0:
+                    deg = 360 - deg
+                else:
+                    deg *= -1
+                addedImg = addedImg.rotate(deg)
+
             baseImg.paste(addedImg,(int(attrs["left"]*ratio), int(attrs["top"]*ratio)), mask=addedImg)
             baseImg.save(imgName)
+
+    # Make the dir if needed (only needed if finish fails somehow and is repeated)
     try:
         os.mkdir("output/%s" % session_id)
     except:
         pass
-
     subprocess.call("convert -delay 1x15 -loop 0 tmp/%s/out-*.gif -layers Optimize output/%s/final.gif" % (session_id, session_id), shell=True)
 
     return url_for("output_gif", filename="%s/final.gif" % session_id)
