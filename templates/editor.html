@@ -8,8 +8,12 @@
 {% endblock js %}
 
 {% block body %}
+<div id="header">
+	<h1>You<span>GIF</span> Editor</h1>
+</div>
 <div id="container">
 	<div id="toolbar">
+		<h3 class="empty">Start by dragging images here.</h3>
 	</div>
 	<div id="window">
 		<div id="images">
@@ -20,6 +24,6 @@
 		<div id="stage" draggable="true">
 		</div>
 	</div>
-	<a href="#" id="submit">SUBMIT</a>
+	<a href="#" id="submit">FINISH!</a>
 </div>
 {% endblock body %}

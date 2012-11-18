@@ -26,6 +26,7 @@ body {
 	text-shadow: 0px 1px 1px #006;
 	font-size: 20px;
 	margin-bottom: 20px;
+	font-weight: 500;
 }
 
 #youtube-form h1 {
@@ -52,21 +53,38 @@ body {
 	outline: none;
 }
 
+#header {
+	margin: 20px auto;
+	width: 600px;
+	height: 300px;
+	text-align: center;
+}
 
+#header h1 {
+	color: #fff;
+	font-size: 75px;
+	font-weight: 100;
+	text-shadow: 0px 1px 1px #900;
+}
+
+#header h1 span {
+	font-weight: 500;
+	color: #f90;
+}
 
 #container {
 	width: 800px;
-	height: 400px;
+	height: 355px;
 	position: absolute;
 	left: 50%;
 	top: 50%;
-	margin: -200px 0 0 -400px;
-	border: 1px solid #aaa;
+	margin: -187px 0 0 -400px;
 	box-shadow: 0px 0px 5px #000;
+	text-align: center;
 }
 
 #window {
-	height: 400px;
+	height: 355px;
 	width: 650px;
 	float: left;
 	background: #333;
@@ -89,8 +107,8 @@ body {
 #toolbar {
 	float:left;
 	width: 139px;
-	height: 390px;
-	background: #999;
+	height: 347px;
+	background: #013;
 	overflow: scroll;
 	border-right: 1px solid #eee;
 	padding: 5px;
@@ -98,6 +116,12 @@ body {
 
 #toolbar img {
 	width: 139px;
+}
+
+#toolbar h3 {
+	color: #fff;
+	font-weight: 300;
+	font-size: 20px;
 }
 
 .upvote {
@@ -110,7 +134,7 @@ body {
 #stage {
 	position: absolute;
 	width: 650px;
-	height: 400px;
+	height: 355px;
 	top: 0;
 	z-index: 100;
 }
@@ -126,8 +150,20 @@ body {
 
 #submit {
 	display: block;
-	background: #0f0;
+	background: #f90;
 	color: #fff;
-	height: 20px;
-	width: 60px;
+	height: 25px;
+	width: 120px;
+	padding: 10px;
+	left: 50%;
+	bottom: -60px;
+	margin-left: -60px;
+	position: absolute;
+	border-radius: 5px;
+	text-decoration: none;
+	color: #630;
+	text-shadow: 0px 0px 1px #fff;
+	font-weight: 700;
+	font-size: 20px;
+	box-shadow: 0px 1px 2px #003;
 }
