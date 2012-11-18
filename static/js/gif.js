@@ -2,9 +2,11 @@ $(function() {
 
 
 	var currentFrame = 1;
-	var totalFrames = parseInt($("#images img:last-child").data('frame'), 10);
+	var totalFrames = $("#window #images img").length;
 	var images = {}
 	var imageData = []
+
+	$("#images img:first-child").addClass("current");
 
 	// Sets the size and position information for images.
 	function updateFrameData(image) {

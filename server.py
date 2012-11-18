@@ -13,7 +13,7 @@ app = Flask(__name__)
 
 @app.route("/")
 def index():
-    return render_template('index.html')
+    return render_template('get_movie.html')
 
 @app.route("/get_movie")
 def get_movie():
