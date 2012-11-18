@@ -12,7 +12,6 @@ app = Flask(__name__)
 
 @app.route("/")
 def index():
-    #return 'Hello World! <img src="static/test.png">'
     return render_template('index.html')
 
 @app.route("/get_movie")
@@ -63,6 +62,10 @@ def add_image(session_id):
         return_json['width'] = width
         
         return json.dumps(return_json)
+
+@app.route('/<session_id>/finish', methods=['POST'])
+def finish(session_id):
+    return 1
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0",port=3001,debug=True)
