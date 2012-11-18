@@ -89,6 +89,7 @@ def add_image(session_id, filename):
 @app.route('/<session_id>/finish', methods=['POST'])
 def finish(session_id):
     data = request.json
+    ratio = data["ratio"]
     for img in data["images"]:
         name = img["name"]
         addedImg = Image.open("tmp/%s/%s" % (session_id, name))
@@ -97,12 +98,17 @@ def finish(session_id):
             if frame_num == "name":
                 continue
             imgName = "tmp/%s/out-%03d.gif" % (session_id, int(frame_num))
-            baseImg = Image.open(imgName)
-            addedImg = addedImg.resize((attrs["width"], attrs["height"]))
-            baseImg.paste(addedImg,(attrs["left"], attrs["top"]))
+            baseImg = Image.open(imgName).convert("RGBA")
+            #logging.error(baseImg.mode)
+            #logging.error(addedImg.mode)
+            addedImg = addedImg.resize((attrs["width"]*ratio, attrs["height"]*ratio))
+            baseImg.paste(addedImg,(attrs["left"]*ratio, attrs["top"]*ratio))
             baseImg.save(imgName)
-            
-    os.mkdir("output/%s" % session_id)
+    try:
+        os.mkdir("output/%s" % session_id)
+    except:
+        pass
+
     subprocess.call("convert -delay 1x15 -loop 0 tmp/%s/out-*.gif -layers Optimize output/%s/final.gif" % (session_id, session_id), shell=True)
 
     return url_for("output_gif", filename="%s/final.gif" % session_id)
