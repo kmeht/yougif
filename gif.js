@@ -86,13 +86,34 @@ $(function() {
 		e.preventDefault();
 		
 		var file = e.originalEvent.dataTransfer.files[0];
-		var uuid = window.location.pathname.split("/")[1];
+		//var uuid = window.location.pathname.split("/")[1];
+		var uuid = "dicks";
 		var reader = new FileReader();
 		reader.readAsText(file, 'UTF-8');
 		reader.onload = function(e) {
 			result = e.target.result;
-			$.post(
-				'/' + uuid + '/add_new',
+			$.ajax({
+				type: 'POST',
+				url: 'http://98.210.146.180:3001/' + uuid + '/add_new',
+				contentType: 'json',
+				data: {
+					filename: file.name,
+					file : result, 
+					uuid : uuid
+				},
+				success: function(data) {
+					images[data.name] = {
+						url: data.url,
+						height: data.height,
+						width: data.width
+					};
+				},
+				error: function() {
+					alert("there was an error...");
+				}
+			});
+			/*$.post(
+				'http://98.210.146.180:3001/' + uuid + '/add_image',
 				{
 					filename: file.name,
 					file : result, 
@@ -105,7 +126,7 @@ $(function() {
 						width: data.width
 					};
 				}
-			);
+			);*/
 		}
 	});
 
@@ -115,7 +136,7 @@ $(function() {
 			'/' + uuid,
 			{
 				images: imageData
-			}
+			},
 			function(data) {
 				alert("Some shit happened");
 			}
@@ -195,7 +216,11 @@ $(function() {
 	}
 
 	function deleteSelectedImage() {
-		$("#stage .image.selected").remove();
+		var image = $("#stage .image.selected");
+		if (image.length > 0) {
+			delete imageData[image.data('index')][currentFrame];
+			image.remove();
+		}
 	}
 
 	// Register keyboard handlers.
