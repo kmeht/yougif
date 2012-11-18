@@ -102,7 +102,7 @@ def finish(session_id):
             baseImg.paste(addedImg,(attrs["left"], attrs["top"]))
             baseImg.save(imgName)
             
-    #os.mkdir("output/%s" % session_id)
+    os.mkdir("output/%s" % session_id)
     subprocess.call("convert -delay 1x15 -loop 0 tmp/%s/out-*.gif -layers Optimize output/%s/final.gif" % (session_id, session_id), shell=True)
 
     return url_for("output_gif", filename="%s/final.gif" % session_id)
