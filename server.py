@@ -9,19 +9,19 @@ import math
 
 from flask import Flask, url_for, request, render_template, send_from_directory
 from werkzeug import secure_filename
+from urlparse import urlparse, parse_qs
 
 app = Flask(__name__)
 
 @app.route("/")
 def index():
-    session_id = str(uuid.uuid4())
-    #return '<form action=' + session_id + ' method="post">Youtube url to download: <input type="text" name="url"><br><input type="submit" value="Go!"></form>'
-    return render_template('index.html', session_id=session_id)
+    return render_template('index.html', session_id=str(uuid.uuid4()))
 
 @app.route("/<session_id>", methods=['POST'])
 def editor(session_id):
     movie_url = request.form['url']
-    movie_id = re.search(r"v=(\w+)", movie_url).group(1)
+    query = urlparse(movie_url).query
+    movie_id = parse_qs(query)['v'][0]
 
     # Grab the youtube video
     subprocess.call("youtube-dl -f 5 -o tmp/%s/%s.flv %s" % (session_id, movie_id, movie_url), shell=True)
@@ -107,4 +107,3 @@ def finish(session_id):
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0",port=3001,debug=True)
-    #url_for('static', filename="test.png")
