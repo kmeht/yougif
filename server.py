@@ -15,7 +15,8 @@ app = Flask(__name__)
 
 @app.route("/")
 def index():
-    return render_template('index.html', session_id=str(uuid.uuid4()))
+    session_id = str(uuid.uuid4())[:8]
+    return render_template('index.html', session_id=session_id)
 
 @app.route("/<session_id>", methods=['POST'])
 def editor(session_id):
