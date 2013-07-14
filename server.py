@@ -15,7 +15,7 @@ app = Flask(__name__)
 
 @app.route("/")
 def index():
-    session_id = str(uuid.uuid4())[:8]
+    session_id = str(uuid.uuid4()).replace('-', '')
     return render_template('index.html', session_id=session_id)
 
 @app.route("/<session_id>", methods=['POST'])
@@ -38,10 +38,6 @@ def editor(session_id):
 @app.route('/output/<path:filename>')
 def output_gif(filename):
     return send_from_directory("output/", filename)
-
-@app.route('/<session_id>/<path:filename>')
-def file_upload(session_id, filename):
-    return send_from_directory("tmp/%s/" % session_id, filename)
 
 @app.route('/tmp/<session_id>/<path:filename>')
 def file_upload(session_id, filename):
