@@ -1,3 +1,4 @@
+*.pyc
 .DS_Store
-tmp/*
-output/*
+yougif/tmp/*
+yougif/output/*

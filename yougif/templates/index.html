@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 
-{% block title %}YouGif{% endblock title %}
+{% block title %}YouGIF{% endblock title %}
 
 {% block body %}
 <div id="youtube-form">
 	<h1>You<span>GIF</span></h1>
-	<h3>YouGif takes videos from YouTube and turns them into gifs... instantly.</h3>
-	<form action="{{ session_id }}" method="post">
+	<h3>YouGIF takes videos from YouTube and turns them into gifs... instantly.</h3>
+	<form action="/" method="post">
 		<input type="text" name="url" placeholder="Paste the URL to a YouTube video here and hit Enter!" />
 	</form>
 </div>

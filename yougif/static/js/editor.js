@@ -132,7 +132,7 @@ $(function() {
 
         $.ajax({
             type: 'post',
-            url: '/' + uuid + '/finish',
+            url: uuid,
             contentType: 'application/json',
             data: JSON.stringify({
                 images: imageData,
