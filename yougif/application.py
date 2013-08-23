@@ -3,7 +3,6 @@ from werkzeug import secure_filename
 
 import Image
 
-import json
 import os
 import subprocess
 
@@ -24,11 +23,13 @@ class YouGIF:
 
     @staticmethod
     def get_frames(session_id):
+        '''Return a list of URLs to the generated frames for the given session_id.'''
         num_frames = int(subprocess.check_output("ls tmp/%s | wc -l" % session_id, shell=True)) - 1
         return ["tmp/%s/out-%03d.gif" % (session_id, num) for num in xrange(1, num_frames)]
 
     @staticmethod
     def generate_gif(session_id, editor_data):
+        '''Use editor data to modify images and collect them into a gif.'''
         ratio = editor_data['ratio']
         for image_data in editor_data['images']:
             name = secure_filename(image_data['name'])
