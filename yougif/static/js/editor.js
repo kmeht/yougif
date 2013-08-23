@@ -1,12 +1,11 @@
 $(function() {
 
-
     var currentFrame = 1;
-    var totalFrames = $("#window #images img").length;
-    var images = {}
-    var imageData = []
+    var totalFrames = $('#window #images img').length;
+    var images = {};
+    var imageData = [];
 
-    $("#images img:first-child").addClass("current");
+    $('#images img:first-child').addClass('current');
 
     // Sets the size and position information for images.
     function updateFrameData(image) {
@@ -21,7 +20,7 @@ $(function() {
 
     // Update the image position and sizes on frame change.
     function updateImagePositions(forward) {
-        $("#stage div.image").each(function() {
+        $('#stage div.image').each(function() {
             var index = $(this).data('index');
             
             // If the frame is not listed, either add it going forward,
@@ -51,7 +50,7 @@ $(function() {
                 display: 'block'
             });
             if (data.rotation) {
-                $(this).css({'-webkit-transform': 'rotate(' + data.rotation + 'deg)'})
+                $(this).css({'-webkit-transform': 'rotate(' + data.rotation + 'deg)'});
             }
         });
     }
@@ -63,15 +62,15 @@ $(function() {
         // Generate and place the DOM element.
         var div = $('<div>');
         div.css({
-            'background-image' : "url(" + data.url + ")",
+            'background-image' : 'url(' + data.url + ')',
             'height' : data.height,
             'width' : data.width,
             'position': 'absolute'
         });
-        div.addClass("image");
-        $("#stage").append(div);
-        div.draggable({containment: "#stage", scrollable: false, stop: function() { updateFrameData($(this)) }});
-        div.resizable({containment: "#stage", stop: function() { updateFrameData($(this)) }});
+        div.addClass('image');
+        $('#stage').append(div);
+        div.draggable({containment: '#stage', scrollable: false, stop: function() { updateFrameData($(this)); }});
+        div.resizable({containment: '#stage', stop: function() { updateFrameData($(this)); }});
         div.data('index', imageData.length);
 
         // Add data about this element and this frame.
@@ -87,13 +86,13 @@ $(function() {
     }
     
     // Inform the server about a new file dropped onto the toolbar.
-    $(document).on("drop", "#toolbar", function(e) {
+    $(document).on('drop', '#toolbar', function(e) {
         e.stopPropagation();
         e.preventDefault();
         
         var file = e.originalEvent.dataTransfer.files[0];
-        var uuid = window.location.pathname.split("/")[1];
-        var name = file.name
+        var uuid = window.location.pathname.split('/')[1];
+        var name = file.name;
         $.ajax({
             type: 'post',
             url: '/' + uuid + '/add_image/' + name,
@@ -112,20 +111,20 @@ $(function() {
                     .attr('src', data.url)
                     .data('name', data.name)
                     .attr('draggable', true);
-                $("#toolbar .empty").remove();
-                $("#toolbar").append(image);
+                $('#toolbar .empty').remove();
+                $('#toolbar').append(image);
             },
             error: function() {
-                alert("there was an error...");
+                alert('there was an error...');
             }
         });
     });
 
-    $(document).on("click", "#submit", function() {
-        var uuid = window.location.pathname.split("/")[1];
+    $(document).on('click', '#submit', function() {
+        var uuid = window.location.pathname.split('/')[1];
 
         // Calculate the scaling ratio.
-        var frame = $("#images img.current");
+        var frame = $('#images img.current');
         frame.css({ width: 'auto'});
         var ratio = frame.width()/650.0;
         frame.css({ width: '' });
@@ -143,7 +142,7 @@ $(function() {
                 window.location.href = data;
             },
             error: function() {
-                console.log("there was some error");
+                console.log('there was some error');
             }
         });
 
@@ -152,47 +151,47 @@ $(function() {
 
 
     
-    $(document).on("dragover", "#stage", function(e) {
+    $(document).on('dragover', '#stage', function(e) {
         e.originalEvent.preventDefault();
-    })
+    });
 
-    $(document).on("drop", "#stage", function(e) {
+    $(document).on('drop', '#stage', function(e) {
         e.stopPropagation();
         placeNewImage(e.originalEvent.dataTransfer.getData('text'));
 
     });
 
-    $(document).on("dragstart", "#toolbar img", function(e) {
+    $(document).on('dragstart', '#toolbar img', function(e) {
         e.originalEvent.dataTransfer.setData('text', $(this).data('name'));
     });
     
     // Event handlers for selecting elements.
-    $(document).on("click", "#stage .image", function(e) {
-        $(this).addClass("selected");
+    $(document).on('click', '#stage .image', function(e) {
+        $(this).addClass('selected');
         e.stopPropagation();
-    })
+    });
 
-    $(document).on("mousedown", "#stage .image", function(e) {
-        $("#stage .image").each(function() {
-            $(this).removeClass("selected");
+    $(document).on('mousedown', '#stage .image', function(e) {
+        $('#stage .image').each(function() {
+            $(this).removeClass('selected');
         });
-        $(this).addClass("selected");
+        $(this).addClass('selected');
         e.stopPropagation();
     });
 
     $(document).click(function(e) {
-        $("#stage .image").each(function() {
-            $(this).removeClass("selected");
+        $('#stage .image').each(function() {
+            $(this).removeClass('selected');
         });
     });
 
     // Go to the previous image, if it exists.
     function handleLeftArrow() {
-        var img = $("img.current");
+        var img = $('img.current');
         var prev = img.prev();
         if (prev.length > 0) {
-            prev.addClass("current");
-            img.removeClass("current");
+            prev.addClass('current');
+            img.removeClass('current');
             currentFrame -= 1;
             updateImagePositions();
         }
@@ -200,18 +199,18 @@ $(function() {
 
     // Go to the next image, if it exists.
     function handleRightArrow() {
-        var img = $("img.current");
+        var img = $('img.current');
         var next = img.next();
         if (next.length > 0) {
-            next.addClass("current");
-            img.removeClass("current");
+            next.addClass('current');
+            img.removeClass('current');
             currentFrame += 1;
             updateImagePositions(true);
         }
     }
 
     function deleteSelectedImage() {
-        var image = $("#stage .image.selected");
+        var image = $('#stage .image.selected');
         if (image.length > 0) {
             delete imageData[image.data('index')][currentFrame];
             image.css({display: 'none'});
@@ -219,7 +218,7 @@ $(function() {
     }
 
     function rotateLeft() {
-        var image = $("#stage .image.selected");
+        var image = $('#stage .image.selected');
         if (image.length > 0) {
             var data = imageData[image.data('index')][currentFrame];
             if (!data.rotation) {
@@ -231,7 +230,7 @@ $(function() {
     }
 
     function rotateRight() {
-        var image = $("#stage .image.selected");
+        var image = $('#stage .image.selected');
         if (image.length > 0) {
             var data = imageData[image.data('index')][currentFrame];
             if (!data.rotation) {
