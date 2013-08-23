@@ -3,14 +3,15 @@ from werkzeug import secure_filename
 
 import Image
 
+import json
 import os
 import subprocess
 
 class YouGIF:
     @classmethod
     def download_movie(this, movie_url, session_id):
-        """ Downloads a video from YouTube and splits it into frames.
-        Returns True if success, False otherwise. """
+        '''Download a video from YouTube and split it into frames. Return True
+        if success, False otherwise.'''
         movie_id = this.extract_movie_id(movie_url)
         if not movie_id:
             return False
@@ -67,9 +68,19 @@ class YouGIF:
 
     @staticmethod
     def extract_movie_id(url):
-        """ Parses a URL to extract the youtube video id. Returns the id as a
-        string, or None. """
+        '''Parse a URL to extract the YouTube video id. Return the id as a
+        string, or None.'''
         # TODO: handle youtu.be urls.
         query = urlparse(url).query
         movie_id = parse_qs(query)['v'][0]
         return movie_id
+
+    @staticmethod
+    def add_image(session_id, binary_data, filename):
+        '''Store a user-uploaded image and return its metadata.'''
+        with open('tmp/%s/%s' % (session_id, filename), 'wb') as f:
+            f.write(binary_data)
+
+        width, height =  Image.open('tmp/%s/%s' % (session_id, filename)).size
+        return {'name': filename, 'width': width, 'height': height}
+

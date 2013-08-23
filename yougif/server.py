@@ -1,11 +1,5 @@
-import subprocess
-import re
 import uuid
-import logging
 import json
-import os
-import Image
-import math
 
 from flask import Flask, url_for, request, render_template, send_from_directory, redirect
 from werkzeug import secure_filename
@@ -42,24 +36,13 @@ def file_upload(session_id, filename):
 
 @app.route('/<session_id>/add_image/<filename>', methods=['POST'])
 def add_image(session_id, filename):
-    if request.method == 'POST':
-        bin_image = request.data
+    filename = secure_filename(filename)
+    image_data = YouGIF.add_image(session_id, request.data, filename)
 
-        name = filename
-
-        with open("tmp/%s/%s" % (session_id, secure_filename(name)), "wb") as f:
-            f.write(bin_image)
-        
-        img = Image.open("tmp/%s/%s" % (session_id, secure_filename(name)))
-        width, height = img.size
-        
-        return_json = {}
-        return_json['name'] = name
-        return_json['url'] = url_for("file_upload", session_id=session_id, filename=secure_filename(name))
-        return_json['height'] = height
-        return_json['width'] = width
-        
-        return json.dumps(return_json)
+    image_data['url'] = url_for('file_upload',
+                                session_id=session_id,
+                                filename=filename)
+    return json.dumps(image_data)
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0",port=3001,debug=True)
+    app.run(host="0.0.0.0", port=3001, debug=True)
