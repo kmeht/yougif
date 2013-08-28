@@ -15,6 +15,9 @@ class YouGIF:
         if not movie_id:
             return False
 
+        if not os.path.isdir('tmp'):
+            os.mkdir('tmp')
+
         # TODO: handle failures.
         subprocess.call('youtube-dl -f 5 -o tmp/%s/%s.flv %s' % (session_id, movie_id, movie_url), shell=True)
         subprocess.call('ffmpeg -i tmp/%s/%s.flv -r 15 -y -an -t 10 tmp/%s/out-%%3d.gif' % (session_id, movie_id, session_id), shell=True)
