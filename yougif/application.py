@@ -59,10 +59,9 @@ class YouGIF:
                                  mask=added_image)
                 base_image.save(image_name)
 
-        try:
-            os.mkdir('output/%s' % session_id)
-        except:
-            pass
+        if not os.path.isdir('output'):
+            os.mkdir('output')
+        os.mkdir('output/%s' % session_id)
 
         subprocess.call('convert -delay 1x15 -loop 0 tmp/%s/out-*.gif -layers Optimize output/%s/final.gif' % (session_id, session_id), shell=True)
         return 'final.gif'
