@@ -8,7 +8,9 @@ body {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
-#youtube-form {
+/* YouTube Form */
+
+#form-container {
     width: 900px;
     height: 100px;
     position: absolute;
@@ -18,7 +20,19 @@ body {
     text-align: center;
 }
 
-#youtube-form h3 {
+.logo {
+    color: #fff;
+    font-size: 150px;
+    font-weight: 100;
+    text-shadow: 0 1px 2px #900;
+}
+
+.logo span {
+    font-weight: 500;
+    color: #f90;
+}
+
+.subtext {
     color: #fff;
     text-shadow: 0 1px 1px #006;
     font-size: 20px;
@@ -26,19 +40,7 @@ body {
     font-weight: 500;
 }
 
-#youtube-form h1 {
-    color: #fff;
-    font-size: 150px;
-    font-weight: 100;
-    text-shadow: 0 1px 2px #900;
-}
-
-#youtube-form h1 span {
-    font-weight: 500;
-    color: #f90;
-}
-
-#youtube-form input[type=text] {
+#url-input {
     width: 900px;
     height: 50px;
     border-radius: 4px;
@@ -49,9 +51,12 @@ body {
     padding: 10px;
 }
 
-#youtube-form input[type=text]:focus {
+#url-input:focus {
+    background: #dee;
     outline: none;
 }
+
+/* Editor */
 
 #header {
     margin: 20px auto;

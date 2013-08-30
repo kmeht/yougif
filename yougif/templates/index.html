@@ -3,11 +3,11 @@
 {% block title %}YouGIF{% endblock title %}
 
 {% block body %}
-<div id="youtube-form">
-	<h1>You<span>GIF</span></h1>
-	<h3>YouGIF takes videos from YouTube and turns them into gifs... instantly.</h3>
+<div id="form-container">
+	<h1 class="logo">You<span>GIF</span></h1>
+	<h3 class="subtext">YouGIF takes videos from YouTube and turns them into gifs... instantly.</h3>
 	<form action="/" method="post">
-		<input type="text" name="url" placeholder="Paste the URL to a YouTube video here and hit Enter!" />
+		<input id="url-input" type="text" name="url" placeholder="Paste the URL to a YouTube video here and hit Enter!" />
 	</form>
 </div>
 {% endblock body %}
